@@ -1,0 +1,4 @@
+import { useRef } from 'react';
+import { Upload } from 'lucide-react';
+import { useStudio } from '@/stores/StudioContext';
+export default function AssetImport(){const s=useStudio();const input=useRef<HTMLInputElement>(null);return <section className="mt-5 pt-5 border-t border-border"><input ref={input} type="file" multiple accept=".glb,.gltf,.bin,.png,.jpg,.jpeg,.webp" className="hidden" aria-label="Import GLB or glTF bundle" onChange={event=>{const files=Array.from(event.target.files||[]);if(files.length)void s.importFiles(files);event.target.value='';}}/><button className="secondary w-full" disabled={s.busy} onClick={()=>input.current?.click()}><Upload size={16}/>Import GLB / glTF</button><p className="text-xs text-subtle mt-2 leading-relaxed">Drop a model into the workspace, or choose a glTF together with its BIN and textures.</p></section>;}

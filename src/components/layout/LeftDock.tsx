@@ -1,0 +1,10 @@
+import { useEffect,useState } from 'react';
+import { PanelLeftClose,PanelLeftOpen,PenLine,WandSparkles } from 'lucide-react';
+import { useStudio } from '@/stores/StudioContext';
+import CreateForm from '@/components/forms/CreateForm';
+import RefineForm from '@/components/forms/RefineForm';
+import VersionHistory from '@/components/features/VersionHistory';
+import AssetImport from '@/components/features/AssetImport';
+import DailyChallenge from '@/components/features/DailyChallenge';
+interface Props {mobile?:boolean;}
+export default function LeftDock({mobile=false}:Props){const s=useStudio();const [tab,setTab]=useState('create');useEffect(()=>{if(s.draft)setTab('create');},[s.draft]);useEffect(()=>{if(s.tourStep===0||s.tourStep===1)setTab('create');},[s.tourStep]);if(!s.dockOpen&&!mobile)return <button className="glass icon-btn m-2 self-start" aria-label="Open assets and creation dock" onClick={()=>s.setDockOpen(true)}><PanelLeftOpen size={19}/></button>;return <aside className={mobile?'p-5':'glass studio-dock rounded-2xl p-4 overflow-y-auto scrollbar'} aria-label="Assets, generation and history"><div className="flex justify-between items-start mb-5"><div><p className="micro mb-2">WORKSPACE / 01</p><h2 className="font-display text-xl font-semibold tracking-tight">Make it tangible.</h2></div>{!mobile&&<button className="icon-btn" aria-label="Collapse creation dock" onClick={()=>s.setDockOpen(false)}><PanelLeftClose size={17}/></button>}</div><div className="flex bg-muted/60 p-1 rounded-xl mb-5"><button className={`flex-1 flex items-center justify-center gap-2 text-sm rounded-lg ${tab==='create'?'bg-panel font-semibold':'text-subtle'}`} onClick={()=>setTab('create')}><WandSparkles size={14}/>Create</button><button disabled={!s.current} className={`flex-1 flex items-center justify-center gap-2 text-sm rounded-lg ${tab==='refine'?'bg-panel font-semibold':'text-subtle'}`} onClick={()=>setTab('refine')}><PenLine size={14}/>Refine</button></div><div hidden={tab!=='create'}><CreateForm/></div><div hidden={tab!=='refine'}><RefineForm/></div><AssetImport/><VersionHistory/><DailyChallenge/></aside>;}
